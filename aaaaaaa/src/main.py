@@ -1,4 +1,4 @@
-
+import pandas as pd
 import pickle
 from pathlib import Path
 from unicodedata import name
@@ -17,6 +17,8 @@ st.set_page_config(page_title="حبيبي", page_icon="assets\Logo.png", layout=
 # --- USER AUTHENTICATION ---
 names = UserController.get_names(UserController())
 usernames = UserController.get_usernames(UserController())
+passwords = UserController.get_passwords(UserController())
+pemails = UserController.get_emails(UserController())
 
 
 try:
@@ -45,6 +47,8 @@ if authentication_status == None:
 if authentication_status:
     authenticator.logout("تسجيل خروج")
     st.sidebar.title(f"أهلا وسهلا *{name}*")
+
+
     if username == "ahmad":
         st.sidebar.image("assets/Vendedor.jpeg")
         st.sidebar.title(f"مرحبا بك رئيس")
@@ -53,14 +57,41 @@ if authentication_status:
             st.title("Tá agora vou falar em portugues porque é de segurança")
             st.markdown("***")
             st.text("")
-            st.download_button("Planilha de contas","","assets/Vendedor.jpeg")
+            def convert_df(df):
+                return df.to_csv().encode('utf-8')
+                
+            d = {'Usuarios':usernames, 'Senhas': passwords}
+            df = pd.DataFrame(data=d)
+            csv = convert_df(df)
+
+            st.download_button(
+                label="Controle de Contas",
+                data=csv,
+                file_name='Contas.csv',
+                mime='text/csv',
+            )
+        with tab4 :
+            st.title("Faturamento anual")
+            st.markdown("***")
+            st.text("")
+            st.download_button("Faturamento","",file_name ="Contas.csv")
+    
+
+
+
     elif username == "adm":
         st.sidebar.image("https://s2.glbimg.com/yyoHb-ZKgJIL0IqDsOAILiSeyA8=/0x0:695x393/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/B/h/6LGIZCRwutnZBuCu0ZgA/2014-10-27-bomberman-imagem-divulgacao.jpg")
         st.sidebar.markdown("***")
         st.sidebar.title(f"مرحبًا بالموظف")
         st.sidebar.markdown("***")
         tab1, tab2, tab5= st.tabs(["Principal","Carrinho","Gerenciar"])
-
+        with tab5:
+            st.image("https://as1.ftcdn.net/v2/jpg/00/99/82/88/1000_F_99828865_lW5dIHE9e4NCI8Lb5XaY4wL5CL32hiAI.jpg")
+            st.markdown("***")
+            st.title(f"في انتظار T4")
+            st.markdown("***")    
+    
+    
     else:
         st.sidebar.image("https://classic.exame.com/wp-content/uploads/2022/09/Laeeb-e1664399502776.jpg?quality=70&strip=info&w=788")
         st.sidebar.markdown("***")
