@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/9458480/read-mp3-in-python-3
+
+Then read the WAV with one of the python WAV libraries. I'd recommend PySoundFile
+
+https://convertio.co/pt/mp3-wav/ (gode gode)
