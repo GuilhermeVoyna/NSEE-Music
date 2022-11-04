@@ -5,7 +5,7 @@ import librosa
 
 DATASET_PATH = "downloads/ismir04_genre/audio/training"
 JSON_PATH = "data_10.json"
-SAMPLE_RATE = 22050
+SAMPLE_RATE = 44100
 TRACK_DURATION = 30 # measured in seconds
 SAMPLES_PER_TRACK = SAMPLE_RATE * TRACK_DURATION
 
@@ -51,6 +51,7 @@ def save_mfcc(dataset_path, json_path, num_mfcc=13, n_fft=2048, hop_length=512, 
                 print(file_path)
                 print()
                 signal, sample_rate = librosa.load(file_path, sr=SAMPLE_RATE)
+                signal_trimmed, _ = librosa.effects.trim(signal, top_db=20)
 
                 # process all segments of audio file
                 for d in range(num_segments):
@@ -60,7 +61,7 @@ def save_mfcc(dataset_path, json_path, num_mfcc=13, n_fft=2048, hop_length=512, 
                     finish = start + samples_per_segment
 
                     # extract mfcc
-                    mfcc = librosa.feature.mfcc(signal[start:finish], sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+                    mfcc = librosa.feature.mfcc(signal_trimmed[start:finish], sample_rate, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
                     mfcc = mfcc.T
 
                     # store only mfcc feature with expected number of vectors
